@@ -2,33 +2,11 @@
 package bulletgraph
 
 import (
-	//"encoding/xml"
-	//"flag"
 	"fmt"
-	//"io"
-	//"os"
 	"github.com/ajstarks/svgo"
 	"strconv"
 	"strings"
 )
-
-//var (
-//	width, height, fontsize, barheight, gutter     int
-//	bgcolor, barcolor, datacolor, compcolor, title string
-//	showtitle, circlemark                          bool
-//	gstyle                                         = "font-family:Calibri;font-size:%dpx"
-//)
-
-// a Bulletgraph Defintion
-// <bulletgraph title="Bullet Graph" top="50" left="250" right="50">
-//    <note>This is a note</note>
-//    <note>More expository text</note>
-//    <bdata title="Revenue 2005" subtitle="USD (1,000)" scale="0,300,50" qmeasure="150,225" cmeasure="250" measure="275"/>
-//    <bdata title="Profit"  subtitle="%" scale="0,30,5" qmeasure="20,25" cmeasure="27" measure="22.5"/>
-//    <bdata title="Avg Order Size subtitle="USD" scale="0,600,100" qmeasure="350,500" cmeasure="550" measure="320"/>
-//    <bdata title="New Customers" subtitle="Count" scale="0,2500,500" qmeasure="1700,2000" cmeasure="2100" measure="1750"/>
-//    <bdata title="Cust Satisfaction" subtitle="Top rating of 5" scale="0,5,1" qmeasure="3.5,4.5" cmeasure="4.7" measure="4.85"/>
-// </bulletgraph>
 
 type Bulletgraph struct {
 	Top   int     `xml:"top,attr"`
@@ -58,33 +36,6 @@ type Options struct {
 	Bgcolor, Barcolor, Datacolor, Compcolor, Title string
 	Showtitle, Circlemark                          bool
 }
-
-// dobg does file i/o
-//func dobg(location string, s *SVG) {
-//	var f *os.File
-//	var err error
-//	if len(location) > 0 {
-//		f, err = os.Open(location)
-//	} else {
-//		f = os.Stdin
-//	}
-//	if err == nil {
-//		readbg(f, s)
-//		f.Close()
-//	} else {
-//		fmt.Fprintf(os.Stderr, "%v\n", err)
-//	}
-//}
-
-// readbg reads and parses the XML specification
-//func readbg(r io.Reader, s *SVG) {
-//	var bg Bulletgraph
-//	if err := xml.NewDecoder(r).Decode(&bg); err == nil {
-//		Drawbg(bg, s)
-//	} else {
-//		fmt.Fprintf(os.Stderr, "%v\n", err)
-//	}
-//}
 
 func New(canvas *svg.SVG) *Bulletgraph {
 	bg := Bulletgraph{}
@@ -213,21 +164,3 @@ func fraction(n float64) float64 {
 	i := int(n)
 	return n - float64(i)
 }
-
-// for every input file (or stdin), draw a bullet graph
-// as specified by command flags
-//func main() {
-//	canvas := svg.New(os.Stdout)
-//	canvas.Start(width, height)
-//	canvas.Rect(0, 0, width, height, "fill:"+bgcolor)
-//	canvas.Gstyle(fmt.Sprintf(gstyle, fontsize))
-//	if len(flag.Args()) == 0 {
-//		dobg("", canvas)
-//	} else {
-//		for _, f := range flag.Args() {
-//			dobg(f, canvas)
-//		}
-//	}
-//	canvas.Gend()
-//	canvas.End()
-//}
