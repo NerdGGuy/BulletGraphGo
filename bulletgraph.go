@@ -69,7 +69,7 @@ type Note struct {
 // Width: Width
 // Height: Height
 // Fontsize: Fontsize (px)
-// Barheigh: Bar height
+// Barheight: Bar height
 // Gutter: Height of gutter around bar
 // Bgcolor: Background color
 // Barcolor: Bar color
