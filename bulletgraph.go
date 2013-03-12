@@ -1,4 +1,24 @@
-// bulletgraph - bullet graphs (Design Specification http://www.perceptualedge.com/articles/misc/Bullet_Graph_Design_Spec.pdf)
+// Package for generating bulletgraphs in SVG - bullet graphs (Design Specification http://www.perceptualedge.com/articles/misc/Bullet_Graph_Design_Spec.pdf)
+// Example:
+//		package main
+//		
+//		import (
+//			"github.com/NerdGGuy/BulletGraphGo"
+//			"github.com/ajstarks/svgo"
+//			"os"
+//		)
+//		
+//		func main() {
+//			canvas := svg.New(os.Stdout)
+//			canvas.Start(1024, 800)
+//			canvas.Rect(0, 0, 1024, 800, "fill:white")
+//			canvas.Gstyle("font-family:Calibri;font-size:18px")
+//			bg := bulletgraph.New(canvas)
+//			bg.Data = append(bg.Data, bulletgraph.Bdata{Title: "Test", Subtitle: "subtitle", Scale: "0,60,2", Qmeasure: "27,29", Cmeasure: 27.5, Measure: 28.5})
+//			bg.Drawbg(canvas)
+//			canvas.Gend()
+//			canvas.End()
+//		}
 package bulletgraph
 
 import (
@@ -8,35 +28,63 @@ import (
 	"strings"
 )
 
+// Top: The top of the first bullet graph.
+// Left: The leftmost pixel to draw the bullet graph.
+// Right: The rightmost pixel to draw the bullet graph.
+// Title: The title of the the generated SVG.
+// Data: An array of all the bullet graph data.
+// Note: An array of notes to display at the bottom of the SVG.
+// Flag: Options for generating bullet graphs.
 type Bulletgraph struct {
-	Top   int     `xml:"top,attr"`
-	Left  int     `xml:"left,attr"`
-	Right int     `xml:"right,attr"`
-	Title string  `xml:"title,attr"`
-	Data  []Bdata `xml:"bdata"`
-	Note  []Note  `xml:"note"`
+	Top   int
+	Left  int
+	Right int
+	Title string
+	Data  []Bdata
+	Note  []Note
 	Flags Options
 }
 
+// Title: Title of the bulletgraph. Displayed on the left of the bullet graph by default.
+// Subtitle: Subtitle displayed under the title.
+// Scale: A delimited string indicating the start,end,increment values for the bullet graph e.g. "0,60,2".
+// Qmeasure: A delimited string indicating the comparison "zones" in the bullet graph e.g. "27,29".
+// Cmeasure: The comparison indicator in the bullet graph.
+// Measure: The measure for the bar to display. 
 type Bdata struct {
-	Title    string  `xml:"title,attr"`
-	Subtitle string  `xml:"subtitle,attr"`
-	Scale    string  `xml:"scale,attr"`
-	Qmeasure string  `xml:"qmeasure,attr"`
-	Cmeasure float64 `xml:"cmeasure,attr"`
-	Measure  float64 `xml:"measure,attr"`
+	Title    string
+	Subtitle string
+	Scale    string
+	Qmeasure string
+	Cmeasure float64
+	Measure  float64
 }
 
+// Text: Note to be displayed under the bullet graph.
 type Note struct {
 	Text string `xml:",chardata"`
 }
 
+// These options have default values some of which are derived from the canvas.
+// Width: Width
+// Height: Height
+// Fontsize: Fontsize (px)
+// Barheigh: Bar height
+// Gutter: Height of gutter around bar
+// Bgcolor: Background color
+// Barcolor: Bar color
+// Datacolor: Data color
+// Compcolor: Comparitive color
+// Title: Title
+// Showtitle: Show title
+// Circlemark: Circle mark
 type Options struct {
 	Width, Height, Fontsize, Barheight, Gutter     int
 	Bgcolor, Barcolor, Datacolor, Compcolor, Title string
 	Showtitle, Circlemark                          bool
 }
 
+// Creates a new Bulletgraph with default options.
 func New(canvas *svg.SVG) *Bulletgraph {
 	bg := Bulletgraph{}
 	bg.Flags.Bgcolor = "white"             //background color
@@ -54,7 +102,7 @@ func New(canvas *svg.SVG) *Bulletgraph {
 	return &bg
 }
 
-// Drawbg draws the bullet graph
+// Drawbg draws the bullet graph onto the canvas
 func (bg *Bulletgraph) Drawbg(canvas *svg.SVG) {
 	qmheight := bg.Flags.Barheight / 3
 
